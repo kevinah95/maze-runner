@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "thread.h"
-#include "utils.h"
+#include "../thread.h"
+#include "../utils.h"
 
 void fake_loop(int *p_counter,Array * array){
     int i;

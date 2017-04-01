@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "utils.h"
+#include "vector.h"
 
 unsigned int rand_interval(unsigned int min, unsigned int max) {
     int r;
@@ -39,7 +40,7 @@ void show_maze(const char *maze, int width, int height) {
         //int rand_num =  rand_interval(0,7);
         for (x = 0; x < width; x++) {
             gotoxy(x,y);
-            printf("%c", maze[x + width * y]);
+            printf("%c", vector_get(maze,x + width * y));
             /*fflush(stdout);
             usleep(SECOND);*/
             /*switch(maze[y * width + x]) {

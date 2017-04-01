@@ -9,8 +9,9 @@ find_package(Threads REQUIRED)
 set(HEADER_FILES utils.h thread.h)
 set(LIB_FILES utils.c thread.c)
 file(GLOB all_SRC "*.h" "*.c")##For all files
-list(REMOVE_ITEM all_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_while.c ${CMAKE_CURRENT_SOURCE_DIR}/test_array.c)
 
-set(SOURCE_FILES main.c utils.h utils.c) ##${all_SRC}
+set(extra_flags -Werror -Wall -Wextra -Wno-deprecated)
+set(CMAKE_CXX_FLGAS "${CMAKE_CXX_FLAGS} ${extra_flags}")
+set(SOURCE_FILES main.c utils.c vector.c thread.c utils.h utilities.h vector.h thread.h ) ##${all_SRC}
 add_executable(maze-runner ${SOURCE_FILES})
 target_link_libraries(maze-runner Threads::Threads)
