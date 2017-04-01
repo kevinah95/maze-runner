@@ -4,22 +4,22 @@
 
 void initArray(Array *a, size_t initialSize) {
     a->array = (ThreadData *)malloc(initialSize * sizeof(ThreadData));
-    a->used = 0;
-    a->size = initialSize;
+    a->size = 0;
+    a->mem_size = initialSize;
 }
 
 void insertArray(Array *a, ThreadData *element) {
-    // a->used is the number of used entries, because a->array[a->used++] updates a->used only *after* the array has been accessed.
-    // Therefore a->used can go up to a->size
-    if (a->used == a->size) {
-        a->size *= 2;
-        a->array = (int *)realloc(a->array, a->size * sizeof(int));
+    // a->size is the number of size entries, because a->array[a->size++] updates a->size only *after* the array has been accessed.
+    // Therefore a->size can go up to a->mem_size
+    if (a->size == a->mem_size) {
+        a->mem_size *= 2;
+        a->array = (ThreadData *)realloc(a->array, a->mem_size * sizeof(ThreadData));
     }
-    a->array[a->used++] = *element;
+    a->array[a->size++] = *element;
 }
 
 void freeArray(Array *a) {
     free(a->array);
     a->array = NULL;
-    a->used = a->size = 0;
+    a->size = a->mem_size = 0;
 }

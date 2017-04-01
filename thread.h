@@ -17,8 +17,8 @@ typedef struct Data
 
 typedef struct {
     ThreadData *array;
-    size_t used;
     size_t size;
+    size_t mem_size;
 } Array;
 
 void initArray(Array *a, size_t initialSize);

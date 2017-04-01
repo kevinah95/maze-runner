@@ -145,12 +145,6 @@
 		<Unit filename="/home/kevinah95/CLionProjects/maze-runner/main.c">
 			<Option target="maze-runner"/>
 		</Unit>
-		<Unit filename="/home/kevinah95/CLionProjects/maze-runner/thread.c">
-			<Option target="maze-runner"/>
-		</Unit>
-		<Unit filename="/home/kevinah95/CLionProjects/maze-runner/thread.h">
-			<Option target="maze-runner"/>
-		</Unit>
 		<Unit filename="/home/kevinah95/CLionProjects/maze-runner/utils.c">
 			<Option target="maze-runner"/>
 		</Unit>
