@@ -60,7 +60,7 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
     int dir = data.future_direction;
     
     switch(dir){
-        case 0:
+        case 0:{
             int left = (x > 0) ? (x - 1) : x;
             int right = (x< width - 1) ? (x + 1) : x;
 
@@ -78,7 +78,7 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 3;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(a*,*data_c);
+                    insertArray(&a,data_c);
                 }
 
                 char right_flag = vector_get(*maze,(right + width * y));
@@ -90,11 +90,12 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 1;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(a*,*data_c);
+                    insertArray(&a,data_c);
                 }
             }
             break;
-        case 1:
+        }
+        case 1:{
             int up = (y > 0) ? (y - 1) : y;
             int down = (y < height - 1) ? (y + 1) : y;
             for (int xl=x ; xl < width; xl++) {
@@ -111,7 +112,7 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 0;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(a*,*data_c);
+                    insertArray(&a,data_c);
                 }
 
                 char down_flag = vector_get(maze,(x + width * down));
@@ -123,9 +124,10 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 2;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(a*,*data_c);
+                    insertArray(&a,data_c);
                 }
             }
+        }
             break;
         case 2:
             break;
