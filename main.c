@@ -12,4 +12,5 @@ int main() {
     vector = readFile(vector,&width, &height);
 
     return(0);
+
 }
