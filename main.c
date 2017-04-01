@@ -11,6 +11,16 @@ int main() {
     vector_init(&vector);
     vector = readFile(vector,&width, &height);
 
+    printf("\nFilas: ");
+    printf("%d",height);
+
+    printf("\nColumnas: ");
+    printf("%d",width);
+
+    /*for (int i = 0 ; i < (height*width) ; i++){
+        printf("%c",vector_get(&vector, i));
+    }*/
+
     return(0);
 
 }

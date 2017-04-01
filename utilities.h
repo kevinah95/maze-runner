@@ -39,16 +39,11 @@ Vector readFile(Vector vector, int *width, int *height){
     printf("\nElementos: ");
     printf("%d",n);
 
-    printf("\nFilas: ");
-    printf("%d",filas);
-
-    printf("\nColumnas: ");
     columnas = n / filas;
-    printf("%d",columnas);
 
-    for (int i = 0 ; i < n ; i++){
-        printf("%c",vector_get(&vector, i));
-    }
+    *width = columnas;
+    *height = filas;
+
     fclose(fp);
     return vector;
 }
