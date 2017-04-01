@@ -1,3 +1,5 @@
+#include "thread.h"
+
 Vector readFile(Vector vector, int *width, int *height){
     char dir [256];
     printf("Ingrese la dirección del archivo con el laberinto:\n>>");
@@ -46,4 +48,12 @@ Vector readFile(Vector vector, int *width, int *height){
 
     fclose(fp);
     return vector;
+}
+
+void move(ThreadData data,Vector maze){
+
+    int nextThreadPosX = data.future_x_pos;
+    int nextThreadPosY = data.future_y_pos;
+    int movementCount = data.accumulated_movements;
+    int dir = data.future_direction;
 }
