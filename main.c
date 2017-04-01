@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <pthread.h>
-#include <string.h>
+#include <memory.h>
 #include "vector.c"
-#include "utilities.h"
 #include "utils.h"
+#include "thread.h"
 
 pthread_t *threads;
 
@@ -41,7 +41,7 @@ int main() {
     int i;
 
 
-   /* //--data_a
+    //--data_a
     initArray(&a, 1);
     ThreadData *data_a;
     data_a = (ThreadData *)malloc(1 * sizeof(ThreadData));
@@ -110,7 +110,7 @@ int main() {
         pthread_join(threads[i], NULL);
         i++;
     }
-    //---------------*/
+    //---------------
 
     freeArray(&a);
     return(0);

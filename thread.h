@@ -1,7 +1,7 @@
 #ifndef MAZE_RUNNER_THREAD_H
 #define MAZE_RUNNER_THREAD_H
 
-
+#include <stdio.h>
 
 struct Data;
 

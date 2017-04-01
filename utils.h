@@ -2,6 +2,7 @@
 #define MAZE_RUNNER_UTILS_H
 
 
+#include "vector.h"
 
 #define MILLISECOND 1000
 #define SECOND 1000*MILLISECOND //1000*MILLISECOND <- One Second
@@ -14,6 +15,7 @@ void gotoxy(int,int);
 char get_random_character();
 int get_random_int();
 void show_maze(const char *maze, int width, int height);
+Vector readFile(Vector vector, int *width, int *height);
 
 
 #endif //MAZE_RUNNER_UTILS_H
