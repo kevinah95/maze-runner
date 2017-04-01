@@ -11,6 +11,7 @@ typedef struct Data
     int future_y_pos;
     int accumulated_movements;
     int future_direction;
+    int drawed;
 } ThreadData;
 
 
