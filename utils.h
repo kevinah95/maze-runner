@@ -5,7 +5,7 @@
 #include "vector.h"
 
 #define MILLISECOND 1000
-#define SECOND 1000*MILLISECOND //1000*MILLISECOND <- One Second
+#define SECOND 200*MILLISECOND //1000*MILLISECOND <- One Second
 
 #define PRINTC(c, f, s0) printf ("\033[%dm" f "\033[0m", 30 + c, s0);
 #define clear() printf("\033[H\033[J");
