@@ -87,22 +87,22 @@
 		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/main.c">
 			<Option target="maze-runner"/>
 		</Unit>
+		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/operation.c">
+			<Option target="maze-runner"/>
+		</Unit>
+		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/operation.h">
+			<Option target="maze-runner"/>
+		</Unit>
 		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/thread.c">
 			<Option target="maze-runner"/>
 		</Unit>
 		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/thread.h">
 			<Option target="maze-runner"/>
 		</Unit>
-		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/utilities.h">
-			<Option target="maze-runner"/>
-		</Unit>
 		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/utils.c">
 			<Option target="maze-runner"/>
 		</Unit>
 		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/utils.h">
-			<Option target="maze-runner"/>
-		</Unit>
-		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/vector.c">
 			<Option target="maze-runner"/>
 		</Unit>
 		<Unit filename="/home/jmaqcr/CLionProjects/maze-runner/vector.h">

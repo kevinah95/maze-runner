@@ -2,12 +2,14 @@
 #include "operation.h"
 #include "vector.h"
 
-void move(Array *a,ThreadData data,const char *maze, int width, int height){
+void move(Array *a,ThreadData *data,const char *maze, int width, int height){
 
-    int x = data.future_x_pos;
-    int y = data.future_y_pos;
-    int movementCount = data.accumulated_movements;
-    int dir = data.future_direction;
+    int x = data->future_x_pos;
+    int y = data->future_y_pos;
+    int movementCount = data->accumulated_movements;
+    int dir = data->future_direction;
+
+
 
     switch(dir){
         case 0:{
@@ -15,8 +17,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
             int right = (x< width - 1) ? (x + 1) : x;
 
             for (unsigned yl = y+1; yl-- > 0;) {
-                char left_flag = vector_get(*maze,left + width * y);
-                if (left_flag == ' ') {
+                y = yl;
+                char left_flag = vector_get(maze,left + width * y);
+                if (left_flag == ' ' && x>0) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = left;
@@ -24,11 +27,11 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 3;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
 
-                char right_flag = vector_get(*maze,(right + width * y));
-                if (right_flag == ' ') {
+                char right_flag = vector_get(maze,(right + width * y));
+                if (right_flag == ' ' && x<(width-1)) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = right;
@@ -36,10 +39,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 1;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
-                if (vector_get(*maze,(x + width * y)) == ' ') {
-                    y = yl-1;
+                if (vector_get(maze,(x + width * y)) == ' ') {
                     movementCount++;
                 }
                 else{
@@ -52,8 +54,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
             int up = (y > 0) ? (y - 1) : y;
             int down = (y < height - 1) ? (y + 1) : y;
             for (int xl=x ; xl < width; xl++) {
-                char up_flag = vector_get(*maze,(x + width * up));
-                if (up_flag == ' ') {
+                x = xl;
+                char up_flag = vector_get(maze,(x + width * up));
+                if (up_flag == ' ' && y > 0) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = up;
@@ -61,11 +64,11 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 0;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
 
                 char down_flag = vector_get(maze,(x + width * down));
-                if (down_flag == ' ') {
+                if (down_flag == ' ' && y < (height-1)) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = down;
@@ -73,10 +76,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 2;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
-                if (vector_get(*maze,(x + width * y)) == ' ') {
-                    x = xl+1;
+                if (vector_get(maze,(x + width * y)) == ' ') {
                     movementCount++;
                 }
                 else{
@@ -90,8 +92,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
             int right = (x < width - 1) ? (x + 1) : x;
             //-------------
             for (int yl = y; yl < height; yl++) {
-                char left_flag = vector_get(*maze,left + width * y);
-                if (left_flag == ' ') {
+                y = yl;
+                char left_flag = vector_get(maze,left + width * y);
+                if (left_flag == ' ' && x>0) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = left;
@@ -99,11 +102,11 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 3;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
 
-                char right_flag = vector_get(*maze,(right + width * y));
-                if (right_flag == ' ') {
+                char right_flag = vector_get(maze,(right + width * y));
+                if (right_flag == ' ' && x<(width-1)) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = right;
@@ -111,14 +114,17 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 1;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
-                if (vector_get(*maze,(x + width * y)) == ' ') {
-                    y = yl+1;
+                if (vector_get(maze,(x + width * y)) == ' ') {
+                    //vector_set(maze,(x + width * y),'X');
+                    printf("\nMete una X");
+                    printf("Movimiento %d",movementCount);
                     movementCount++;
                 }
                 else {
                     return;
+
                 }
             }
         }break;
@@ -127,8 +133,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
             int up = (y > 0) ? (y - 1) : y;
             int down = (y < height - 1) ? (y + 1) : y;
             for (unsigned xl = x+1; xl-- > 0;) {
+                x = xl;
                 char up_flag = vector_get(maze, (x + width * up));
-                if (up_flag == ' ') {
+                if (up_flag == ' ' && y > 0) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = up;
@@ -136,11 +143,11 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 0;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
 
                 char down_flag = vector_get(maze,(x + width * down));
-                if (down_flag == ' ') {
+                if (down_flag == ' ' && y < (height-1)) {
                     ThreadData *data_c;
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = down;
@@ -148,10 +155,9 @@ void move(Array *a,ThreadData data,const char *maze, int width, int height){
                     data_c->future_direction = 2;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
-                    insertArray(&a,data_c);
+                    insertArray(a,data_c);
                 }
                 if (vector_get(maze,(x + width * y)) == ' ') {
-                    x = xl-1;
                     movementCount++;
                 } else {
                     return;

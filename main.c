@@ -4,6 +4,7 @@
 #include "vector.c"
 #include "utils.h"
 #include "thread.h"
+#include "operation.h"
 
 pthread_t *threads;
 
@@ -50,9 +51,18 @@ int main() {
     data_a->future_direction = 2;
     data_a->drawed = 0;
     data_a->accumulated_movements = 0;
-    insertArray(&a, data_a);
-    //--data_b
+    insertArray(&a, &data_a);
     initArray(&a, 1);
+
+    move(&a,data_a,&vector,width,height);
+    printf("%d",a.size);
+    /*for (int i = 0 ; i<a.size;i++){
+        printf("%d",a.array->accumulated_movements);
+    }*/
+
+
+    //--data_b
+    /*initArray(&a, 1);
     ThreadData *data_b;
     data_b = (ThreadData *)malloc(1 * sizeof(ThreadData));
     data_b->future_x_pos = 4;
@@ -109,7 +119,7 @@ int main() {
         pthread_join(threads[i], NULL);
         pthread_join(threads[i], NULL);
         i++;
-    }
+    }*/
     //---------------
 
     freeArray(&a);
