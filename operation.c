@@ -1,13 +1,15 @@
 #include <stdlib.h>
 #include "operation.h"
 #include "vector.h"
+#include "thread.h"
 
-void move(Array *a,ThreadData *data,const char *maze, int width, int height){
+void move(Array *a, ThreadData *data, const char *maze, int width, int height){
 
     int x = data->future_x_pos;
     int y = data->future_y_pos;
     int movementCount = data->accumulated_movements;
     int dir = data->future_direction;
+    char sym = (a->size) + '0';
 
 
 
@@ -41,7 +43,8 @@ void move(Array *a,ThreadData *data,const char *maze, int width, int height){
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
                 }
-                if (vector_get(maze,(x + width * y)) == ' ') {
+                if (vector_get(maze,(x + width * y)) == ' '){
+                    vector_set(maze,(x + width * y),sym);
                     movementCount++;
                 }
                 else{
@@ -79,6 +82,7 @@ void move(Array *a,ThreadData *data,const char *maze, int width, int height){
                     insertArray(a,data_c);
                 }
                 if (vector_get(maze,(x + width * y)) == ' ') {
+                    vector_set(maze,(x + width * y),sym);
                     movementCount++;
                 }
                 else{
@@ -117,9 +121,7 @@ void move(Array *a,ThreadData *data,const char *maze, int width, int height){
                     insertArray(a,data_c);
                 }
                 if (vector_get(maze,(x + width * y)) == ' ') {
-                    //vector_set(maze,(x + width * y),'X');
-                    printf("\nMete una X");
-                    printf("Movimiento %d",movementCount);
+                    vector_set(maze,(x + width * y),sym);
                     movementCount++;
                 }
                 else {
@@ -158,6 +160,7 @@ void move(Array *a,ThreadData *data,const char *maze, int width, int height){
                     insertArray(a,data_c);
                 }
                 if (vector_get(maze,(x + width * y)) == ' ') {
+                    vector_set(maze,(x + width * y),sym);
                     movementCount++;
                 } else {
                     return;
