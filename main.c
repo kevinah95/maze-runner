@@ -112,6 +112,27 @@ int main() {
     data_a->drawed = 0;
     data_a->accumulated_movements = 0;
     insertArray(&a, data_a);
+
+    printf("\n");
+    show_maze(&vector,width,height);
+    int i_dir = 0;
+
+
+
+    //RPOBLEMA: OCUPO PASAR a.array[i_dir] como data_a en la línea 54
+    while (i_dir < a.size){
+        move(&a,&a.array[i_dir],&vector,width,height);
+        printf("\n");
+        show_maze(&vector,width,height);
+        printf("\nTamaño: %d",a.size);
+        i_dir++;
+    }
+
+    /*for (int i = 0 ; i<a.size;i++){
+        printf("%d",a.array->accumulated_movements);
+    }*/
+
+
     //--data_b
     ThreadData *data_b;
     data_b = (ThreadData *)malloc(1 * sizeof(ThreadData));
