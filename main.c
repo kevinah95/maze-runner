@@ -136,8 +136,7 @@ int main() {
 
 
     //--data_b
-    initArray(&a, 1);
-    ThreadData *data_b;
+    /*ThreadData *data_b;
     data_b = (ThreadData *)malloc(1 * sizeof(ThreadData));
     data_b->future_x_pos = 1;
     data_b->future_y_pos = 4;
@@ -146,7 +145,6 @@ int main() {
     data_b->accumulated_movements = 5;
     insertArray(&a, data_b);
     //--data_c
-    initArray(&a, 1);
     ThreadData *data_c;
     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
     data_c->future_x_pos = 2;
@@ -169,8 +167,8 @@ int main() {
             err = pthread_create(&(threads[index_threads]), NULL, &doSomeThing, &a.array[i]);
             if (err != 0)
                 printf("\ncan't create thread :[%s]", strerror(err));
-            /*else
-                printf("\n Thread %d created successfully\n",index_threads);*/
+            *//*else
+                printf("\n Thread %d created successfully\n",index_threads);*//*
             //pthread_join(threads[index_threads], NULL);
             index_threads++;
         } else{
@@ -180,8 +178,8 @@ int main() {
             err = pthread_create(&(threads[index_threads]), NULL, &doSomeThing, &a.array[i]);
             if (err != 0)
                 printf("\ncan't create thread :[%s]", strerror(err));
-            /*else
-                printf("\n Thread %d created successfully\n",index_array);*/
+            *//*else
+                printf("\n Thread %d created successfully\n",index_array);*//*
             //pthread_join(threads[index_threads], NULL);
             index_threads++;
         }
@@ -203,7 +201,7 @@ int main() {
         printf("\n");
     }
 
-    pthread_mutex_destroy(&lock);
+    pthread_mutex_destroy(&lock);*/
     freeArray(&a);
     return(0);
 

@@ -8,13 +8,13 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
     int x = data->future_x_pos;
     int y = data->future_y_pos;
     int movementCount = data->accumulated_movements;
-    int dir = data->future_direction;
-    char sym = (a->size) + '0';
+    enum Direction dir = data->future_direction;
+    char sym = 'a' + (random() % 26);
 
 
 
     switch(dir){
-        case 0:{
+        case UP:{
             int left = (x > 0) ? (x - 1) : x;
             int right = (x< width - 1) ? (x + 1) : x;
 
@@ -33,7 +33,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = left;
                     data_c->future_y_pos = y;
-                    data_c->future_direction = 3;
+                    data_c->future_direction =LEFT;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
@@ -45,7 +45,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = right;
                     data_c->future_y_pos = y;
-                    data_c->future_direction = 1;
+                    data_c->future_direction = RIGHT;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
@@ -53,7 +53,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
             }
 
         }break;
-        case 1:{
+        case RIGHT:{
             int up = (y > 0) ? (y - 1) : y;
             int down = (y < height - 1) ? (y + 1) : y;
             for (int xl=x ; xl < width; xl++) {
@@ -71,7 +71,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = x;
                     data_c->future_y_pos = up;
-                    data_c->future_direction = 0;
+                    data_c->future_direction = UP;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
@@ -83,7 +83,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *) malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = x;
                     data_c->future_y_pos = down;
-                    data_c->future_direction = 2;
+                    data_c->future_direction = DOWN;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a, data_c);
@@ -91,7 +91,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
             }
         }break;
 
-        case 2:{
+        case DOWN:{
             int left = (x > 0) ? (x - 1) : x;
             int right = (x < width - 1) ? (x + 1) : x;
             //-------------
@@ -111,7 +111,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = left;
                     data_c->future_y_pos = y;
-                    data_c->future_direction = 3;
+                    data_c->future_direction =LEFT;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
@@ -123,7 +123,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = right;
                     data_c->future_y_pos = y;
-                    data_c->future_direction = 1;
+                    data_c->future_direction = RIGHT;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
@@ -131,7 +131,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
             }
         }break;
 
-        case 3:{
+        case LEFT:{
             int up = (y > 0) ? (y - 1) : y;
             int down = (y < height - 1) ? (y + 1) : y;
             for (unsigned xl = x+1; xl-- > 0;) {
@@ -148,7 +148,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = x;
                     data_c->future_y_pos = up;
-                    data_c->future_direction = 0;
+                    data_c->future_direction = UP;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
@@ -160,7 +160,7 @@ void move(Array *a, ThreadData *data, const char *maze, int width, int height){
                     data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
                     data_c->future_x_pos = x;
                     data_c->future_y_pos = down;
-                    data_c->future_direction = 2;
+                    data_c->future_direction = DOWN;
                     data_c->drawed = 0;
                     data_c->accumulated_movements = movementCount;
                     insertArray(a,data_c);
