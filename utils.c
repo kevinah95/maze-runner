@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "utils.h"
 
 
@@ -35,14 +36,14 @@ int get_random_int(){
 
 void show_maze(const char *maze, int width, int height) {
     int x, y;
-    clear();
+    //clear();
     for (y = 0; y < height; y++) {
         //int rand_num =  rand_interval(0,7);
         for (x = 0; x < width; x++) {
             gotoxy(x,y);
             printf("%c", vector_get(maze,x + width * y));
-            /*fflush(stdout);
-            usleep(SECOND);*/
+//            fflush(stdout);
+//            usleep(SECOND);
             /*switch(maze[y * width + x]) {
                 case '#':  printf("[]");  break;
                 case ' ':  printf("  ");  break;

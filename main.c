@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <memory.h>
+#include <semaphore.h>
 #include <unistd.h>
+#include <syscall.h>
 #include "vector.c"
 #include "utils.h"
 #include "thread.h"
@@ -11,85 +13,199 @@ pthread_t *threads;
 pthread_mutex_t lock;
 int index_threads = 0;
 int index_array = 0;
+Vector vector;
+int width = 0;
+int height = 0;
+sem_t mySemaphore;
+pthread_barrier_t barrier;
+int cola_proc = 0;
 
+int has_next(int cur_x, int cur_y, enum Direction dir) {
+    switch (dir) {
+        case DOWN: {
+            int next_y = cur_y + 1;
 
-void* doOtherThing(ThreadData *p_data)
-{
-    unsigned long i = 0;
+            if (next_y < height) {
+                if (vector_get(&vector, (cur_x + width * next_y)) != '#') {
+                    return TRUE;
+                }
+            }
+            return FALSE;
+        }
+            break;
+        case RIGHT: {
+            int next_x = cur_x + 1;
 
-    //for(i=0; i<(0xFFFF);i++);
+            if (next_x < width) {
+                if (vector_get(&vector, (next_x + width * cur_y)) != '#') {
+                    return TRUE;
+                }
+            }
+            return FALSE;
+        }
+            break;
+        case UP: {
+            int next_y = cur_y - 1;
 
-    //printThreadData(p_data);
-    /*if (p_data->future_direction == LEFT){
-        sleep(1);
-        printf("-----------left(%d)",index_threads);
-        printf("Well blue");
-    }*/
-    pthread_mutex_lock(&lock);
-    print_in_maze(p_data);
-    pthread_mutex_unlock(&lock);
-    //printf("\nThread %d processing done\n",);
-    return NULL;
+            if (next_y >= 0) {
+                if (vector_get(&vector, (cur_x + width * next_y)) != '#') {
+                    return TRUE;
+                }
+            }
+            return FALSE;
+        }
+            break;
+        case LEFT: {
+            int next_x = cur_x - 1;
+
+            if (next_x >= 0) {
+                if (vector_get(&vector, (next_x + width * cur_y)) != '#') {
+                    return TRUE;
+                }
+            }
+            return FALSE;
+        }
+            break;
+
+    }
 }
 
-void* doSomeThing(ThreadData *p_data)
-{
+int is_finish(int cur_x, int cur_y, enum Direction dir) {
 
-    unsigned long i = 0;
+    if (cur_y < height && cur_x < width && cur_y >= 0 && cur_x >= 0) {
+        if (vector_get(&vector, (cur_x + width * cur_y)) == '/') {
+            return TRUE;
+        }
+    }
+    return FALSE;
 
-    //for(i=0; i<(0xFFFF);i++);
+}
 
-    //printThreadData(p_data);
-    /*if(p_data->future_direction == LEFT){
-        ThreadData *data_b;
-        data_b = (ThreadData *)malloc(1 * sizeof(ThreadData));
-        data_b->future_x_pos = 1;
-        data_b->future_y_pos = 4;
-        data_b->future_direction = LEFT;
-        data_b->drawed = 0;
-        data_b->accumulated_movements = 5;
-        int err;
-
-        threads =(pthread_t *)realloc(threads,sizeof ( pthread_t )*(index_threads+1)) ;
-        if(threads==NULL)
-            printf("error with realloc");
-        err = pthread_create(&(threads[index_threads]), NULL, &doOtherThing, data_b);
-        if (err != 0)
-            printf("\ncan't create thread :[%s]", strerror(err));
-        *//*else
-            printf("\n Thread %d created successfully\n",index_array);*//*
-        //pthread_join(threads[index_threads], NULL);
-
-        //pthread_join(threads[index_threads], NULL);
-        index_threads++;
-    } else{*/
+void *doSomeThing(ThreadData *p_data) {
     pthread_mutex_lock(&lock);
-    print_in_maze(p_data);
+    int movi = 0;
+    switch (p_data->future_direction) {
+        case DOWN: {
+            int x = p_data->future_x_pos;
+            int y = p_data->future_y_pos;
+            while (has_next(x, y, DOWN)) {
+                //sem_wait(&mySemaphore);
+                print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+                //sem_post(&mySemaphore);
+                movi++;
+                y++;
+            }
+
+            //sem_wait(&mySemaphore);
+            print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+            //sem_post(&mySemaphore);
+            if (is_finish(x, y, DOWN)) {
+                //sem_wait(&mySemaphore);
+                gotoxy(width + 5, height + 5);
+                printf("Se encontró una salida: x:%d y:%d movimientos:%d", x, y, p_data->accumulated_movements + movi);
+                fflush(stdout);
+                usleep(SECOND);
+                //sem_post(&mySemaphore);
+            }
+        }
+            break;
+        case RIGHT: {
+            int x = p_data->future_x_pos;
+            int y = p_data->future_y_pos;
+            while (has_next(x, y, RIGHT)) {
+                //sem_wait(&mySemaphore);
+                print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+                //sem_post(&mySemaphore);
+                movi++;
+                x++;
+            }
+            //sem_wait(&mySemaphore);
+            print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+            //sem_post(&mySemaphore);
+            if (is_finish(x, y, RIGHT)) {
+                //sem_wait(&mySemaphore);
+                gotoxy(width + 5, height + 5);
+                printf("Se encontró una salida: x:%d y:%d movimientos:%d", x, y, p_data->accumulated_movements + movi);
+                fflush(stdout);
+                usleep(SECOND);
+                //sem_post(&mySemaphore);
+            }
+        }
+            break;
+        case UP: {
+            int x = p_data->future_x_pos;
+            int y = p_data->future_y_pos;
+            while (has_next(x, y, UP)) {
+                //sem_wait(&mySemaphore);
+                print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+                //sem_post(&mySemaphore);
+                movi++;
+                y--;
+            }
+            //sem_wait(&mySemaphore);
+            print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+            //sem_post(&mySemaphore);
+            if (is_finish(x, y, UP)) {
+                //sem_wait(&mySemaphore);
+                gotoxy(width + 5, height + 5);
+                printf("Se encontró una salida: x:%d y:%d movimientos:%d", x, y, p_data->accumulated_movements + movi);
+                fflush(stdout);
+                usleep(SECOND);
+                //sem_post(&mySemaphore);
+            }
+        }
+            break;
+        case LEFT: {
+            int x = p_data->future_x_pos;
+            int y = p_data->future_y_pos;
+            while (has_next(x, y, LEFT)) {
+                //sem_wait(&mySemaphore);
+                print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+                //sem_post(&mySemaphore);
+                movi++;
+                x--;
+            }
+            //sem_wait(&mySemaphore);
+            print_in_coordinates(x, y, vector_get(&vector, x + width * y));
+            //sem_post(&mySemaphore);
+            if (is_finish(x, y, LEFT)) {
+                //sem_wait(&mySemaphore);
+                gotoxy(width + 5, height + 5);
+                printf("Se encontró una salida: x:%d y:%d movimientos:%d", x, y, p_data->accumulated_movements + movi);
+                fflush(stdout);
+                usleep(SECOND);
+                //sem_post(&mySemaphore);
+            }
+        }
+            break;
+    }
+
+
+    //sem_wait(&mySemaphore);
+    gotoxy(width + 3, height + 3);
+    printf("Thread treminado [getpid: %d getpthread_self: %lu tid:%lu]\n", getpid(), pthread_self(),
+           syscall(SYS_gettid));
+    fflush(stdout);
+    usleep(SECOND);
+    //sem_post(&mySemaphore);
+    
     pthread_mutex_unlock(&lock);
-    //}
-
-
-
-    //printf("\nThread %d processing done\n",);
     return NULL;
 }
 
 int main() {
     //Lectura de la dirección del archivo
-    int width = 0;
-    int height = 0;
     int err;
-    Vector vector;
+
     vector_init(&vector);
-    vector = readFile(vector,&width, &height);
+    vector = readFile(vector, &width, &height);
+    clear();
+    gotoxy(width + 1, height + 1);
+    printf("Filas: %d Columnas:%d", height, width);
+    fflush(stdout);
+    usleep(SECOND);
 
-    printf("\nFilas: ");
-    printf("%d",height);
-
-    printf("\nColumnas: ");
-    printf("%d",width);
-
-    show_maze(&vector,width,height);
+    show_maze(&vector, width, height);
     printf("\n");
     printf("\n");
     //----------------Array
@@ -97,17 +213,17 @@ int main() {
     usleep(SECOND);
     Array a;
     int i;
-    if (pthread_mutex_init(&lock, NULL) != 0)
-    {
+    if (pthread_mutex_init(&lock, NULL) != 0) {
         printf("\n mutex init failed\n");
         return 1;
     }
+    sem_init(&mySemaphore, 0, 0);
 
-
+    //----------------------------------------------------------------------
     //--data_a
     initArray(&a, 1);
     ThreadData *data_a;
-    data_a = (ThreadData *)malloc(1 * sizeof(ThreadData));
+    data_a = (ThreadData *) malloc(1 * sizeof(ThreadData));
     data_a->future_x_pos = 0;
     data_a->future_y_pos = 0;
     data_a->future_direction = DOWN;
@@ -115,71 +231,58 @@ int main() {
     data_a->accumulated_movements = 0;
     insertArray(&a, data_a);
 
-    printf("\n");
-    show_maze(&vector,width,height);
     int i_dir = 0;
 
 
 
     //RPOBLEMA: OCUPO PASAR a.array[i_dir] como data_a en la línea 54
-    while (i_dir < a.size){
-        move(&a,&a.array[i_dir],&vector,width,height);
-        printf("\n");
-        show_maze(&vector,width,height);
-        printf("\nTamaño: %d",a.size);
+    while (i_dir < a.size) {
+        move(&a, &a.array[i_dir], &vector, width, height);
+        usleep(SECOND);
         i_dir++;
     }
+    //show_maze(&vector,width,height);
+    pthread_barrier_init(&barrier, 0, a.size);
+
+    /*i_dir = 0;
+    while (i_dir < a.size) {
+        printf("%d",a.array[i_dir].future_x_pos);//------------
+        i_dir++;
+    }*/
+
 
     /*for (int i = 0 ; i<a.size;i++){
         printf("%d",a.array->accumulated_movements);
     }*/
 
 
-    //--data_b
-    /*ThreadData *data_b;
-    data_b = (ThreadData *)malloc(1 * sizeof(ThreadData));
-    data_b->future_x_pos = 1;
-    data_b->future_y_pos = 4;
-    data_b->future_direction = RIGHT;
-    data_b->drawed = 0;
-    data_b->accumulated_movements = 5;
-    insertArray(&a, data_b);
-    //--data_c
-    ThreadData *data_c;
-    data_c = (ThreadData *)malloc(1 * sizeof(ThreadData));
-    data_c->future_x_pos = 2;
-    data_c->future_y_pos = 3;
-    data_c->future_direction = UP;
-    data_c->drawed = 0;
-    data_c->accumulated_movements = 7;
-    insertArray(&a, data_c);
-    int num_trues =0;
 
     //---------1fst Thread
-    threads=(pthread_t *)malloc(1 * sizeof(pthread_t ));
+    threads = (pthread_t *) malloc(1 * sizeof(pthread_t));
     int index_threads = 0;
 
 
     i = 0;
     //----------------While
-    while (i < a.size){
-        if(index_threads==0){
+    //sem_post(&mySemaphore);
+    while (i < a.size) {
+        if (index_threads == 0) {
             err = pthread_create(&(threads[index_threads]), NULL, &doSomeThing, &a.array[i]);
             if (err != 0)
                 printf("\ncan't create thread :[%s]", strerror(err));
-            *//*else
-                printf("\n Thread %d created successfully\n",index_threads);*//*
+            /*else
+                printf("\n Thread %d created successfully\n",index_threads);*/
             //pthread_join(threads[index_threads], NULL);
             index_threads++;
-        } else{
-            threads =(pthread_t *)realloc(threads,sizeof ( pthread_t )*(index_threads+1)) ;
-            if(threads==NULL)
+        } else {
+            threads = (pthread_t *) realloc(threads, sizeof(pthread_t) * (index_threads + 1));
+            if (threads == NULL)
                 printf("error with realloc");
             err = pthread_create(&(threads[index_threads]), NULL, &doSomeThing, &a.array[i]);
             if (err != 0)
                 printf("\ncan't create thread :[%s]", strerror(err));
-            *//*else
-                printf("\n Thread %d created successfully\n",index_array);*//*
+            /*else
+                printf("\n Thread %d created successfully\n",index_array);*/
             //pthread_join(threads[index_threads], NULL);
             index_threads++;
         }
@@ -189,20 +292,20 @@ int main() {
     //----------------
 
     i = 0;
-    while(i < index_threads)
-    {
-        pthread_join(threads[i], NULL);
+    while (i < index_threads) {
         pthread_join(threads[i], NULL);
         i++;
     }
     //---------------
 
-    for (int j = 0; j < height*2; ++j) {
+    for (int j = 0; j < height; ++j) {
         printf("\n");
     }
 
-    pthread_mutex_destroy(&lock);*/
+    pthread_mutex_destroy(&lock);
+    sem_destroy(&mySemaphore);
+    pthread_barrier_destroy(&barrier);
     freeArray(&a);
-    return(0);
+    return (0);
 
 }
