@@ -11,12 +11,12 @@ find_package(Threads REQUIRED)
 set(extra_flags -Werror -Wall -Wextra -Wno-deprecated -Wimplicit-function-declaration)
 set(CMAKE_CXX_FLGAS "${CMAKE_CXX_FLAGS} ${extra_flags}")
 set(SOURCES     main.c
-                operation.c
+                utils.c
                 thread.c
-                utils.c)
-set (HEADERS    operation.h
+                operation.c)
+set (HEADERS    utils.h
                 thread.h
-                utils.h
+                operation.h
                 vector.h)
 ##include_directories(BEFORE ${HEADERS})
 add_executable(maze-runner ${SOURCES} ${HEADERS})
